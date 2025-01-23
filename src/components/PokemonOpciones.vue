@@ -1,7 +1,7 @@
 <template>
   <div class="options-container">
     <ul>
-      <li @click="seleccionado" v-for="pokemon in pokemons" :key="pokemon.id">{{ pokemon.nombre }}</li>
+      <li @click="seleccionado(pokemon.id)" v-for="pokemon in pokemons" :key="pokemon.id">{{ pokemon.nombre }}</li>
     </ul>
   </div>
 </template>
@@ -15,8 +15,15 @@ export default {
     }
   },
   methods:{
-    seleccionado(){
-      console.log("hizo click ;3")
+    seleccionado(id){
+      console.log("hizo click ;3");
+      console.log(id);
+      const objetoEnviado={
+        identificador: id,
+        valor2: true,
+        valor3: 'Ejemplo2'
+      }
+      this.$emit('seleccion', objetoEnviado); //mando un parametro que quiero enviar desde el hijo al padre
     }
   }
 }
