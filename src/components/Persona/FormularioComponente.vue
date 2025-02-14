@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {obtenerPorIdFachada} from "../client/PersonaClient"
+//import {obtenerPorIdFachada} from "../client/PersonaClient"
 
 export default {
     
