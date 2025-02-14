@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Pagina from './pages/PokemonPage.vue'
+import Pagina from './pages/PersonaPage.vue'
 
 export default {
   name: 'App',
