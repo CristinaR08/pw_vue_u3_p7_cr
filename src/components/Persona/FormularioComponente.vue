@@ -1,31 +1,74 @@
 <template>
     <h1>Bienvenidx :3</h1>
-    <div>
-        <form class="formulario">
-            <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" v-model="nombre">
-            </div>
-            <div class="form-group">
-                <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" v-model="apellido">
-            </div>
-            <div class="form-group">
-                <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-                <input type="date" id="fechaNacimiento" v-model="fechaNacimiento">
-            </div>
-            <button type="submit" @click.prevent="submitForm">Enviar</button>
-        </form>
+    <div class="container">
+        <div class="form-group">
+            <label for="id">Id:</label>
+            <input v-model="id" type="text" id="id">
+        </div>
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" v-model="nombre">
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" v-model="apellido">
+        </div>
+        <div class="form-group">
+            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fechaNacimiento" v-model="fechaNacimiento">
+        </div>
+        <div>
+            <button type="submit" @click="consultar()">Consultar</button>
+        </div>
+        <div>
+            <button type="submit" @click="guardar()">Guardar</button>
+        </div>
     </div>
 
 </template>
 
 <script>
+import { obtenerPersonaIDFachada, insertarFachada } from '@/client/PersonaClient';
+
 //import {obtenerPorIdFachada} from "../client/PersonaClient"
 
 export default {
+    data() {
+        return {
+            id: '',
+            nombre: '',
+            apellido: '',
+            fechaNacimiento: ''
+        }
+    },
+    mounted() { //cargar apenas se monta
+        console.log("antes de llamar al API")
+        obtenerPersonaIDFachada(2);
+    },
 
+    methods: {
+        async consultar() {
+            const data = await obtenerPersonaIDFachada(this.id);
+            this.nombre = data.nombre;
+            this.apellido = data.apellido;
+            this.fechaNacimiento = data.fechaNacimiento;
+            console.log(data);
+        },
 
+        async guardar() {
+            const bodyPersona = {
+            nombre: this.nombre,
+            apellido: this.apellido,
+            fechaNacimiento: this.fechaNacimiento,
+            }
+            try {
+            await insertarFachada(bodyPersona);
+            console.log("Persona guardada exitosamente");
+            } catch (error) {
+            console.error("Error al guardar la persona:", error);
+            }
+        },
+    }
 }
 </script>
 
@@ -70,5 +113,12 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
 }
 </style>
