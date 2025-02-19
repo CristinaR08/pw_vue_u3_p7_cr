@@ -23,12 +23,21 @@
         <div>
             <button type="submit" @click="guardar()">Guardar</button>
         </div>
+        <div>
+            <button type="submit" @click="actualizar()">Actualizar</button>
+        </div>
+        <div>
+            <button type="submit" @click="actualizarP()">Actualizar Nombre</button>
+        </div>
+        <div>
+            <button type="submit" @click="borrar()">Borrar</button>
+        </div>
     </div>
 
 </template>
 
 <script>
-import { obtenerPersonaIDFachada, insertarFachada } from '@/client/PersonaClient';
+import { obtenerPersonaIDFachada, insertarFachada, actualizarFachada, actualizarParcialFachada, borrarFachada } from '@/client/PersonaClient';
 
 //import {obtenerPorIdFachada} from "../client/PersonaClient"
 
@@ -54,20 +63,54 @@ export default {
             this.fechaNacimiento = data.fechaNacimiento;
             console.log(data);
         },
-
         async guardar() {
             const bodyPersona = {
-            nombre: this.nombre,
-            apellido: this.apellido,
-            fechaNacimiento: this.fechaNacimiento,
+                nombre: this.nombre,
+                apellido: this.apellido,
+                fechaNacimiento: this.fechaNacimiento,
             }
             try {
-            await insertarFachada(bodyPersona);
-            console.log("Persona guardada exitosamente");
+                await insertarFachada(bodyPersona);
+                console.log("Persona guardada exitosamente");
             } catch (error) {
-            console.error("Error al guardar la persona:", error);
+                console.error("Error al guardar la persona:", error);
             }
         },
+
+        async actualizar() {
+            const bodyPersona = {
+                nombre: this.nombre,
+                apellido: this.apellido,
+                fechaNacimiento: null
+            };
+            try {
+                await actualizarFachada(this.id, bodyPersona);
+                console.log("Persona actualizada exitosamente");
+            } catch (error) {
+                console.error("Error al actualizar la persona:", error);
+            }
+        },
+
+        async actualizarP() {
+            const bodyPersona = {
+                nombre: this.nombre
+            };
+            try {
+                await actualizarParcialFachada(this.id, bodyPersona);
+                console.log("Persona actualizada parcialmente");
+            } catch (error) {
+                console.error("Error al actualizar parcialmente:", error.response?.data || error.message);
+            }
+        },
+
+        async borrar() {
+            try {
+                await borrarFachada(this.id);
+                console.log("Persona eliminada exitosamente");
+            } catch (error) {
+                console.error("Error al borrar la persona:", error.response?.data || error.message);
+            }
+        }
     }
 }
 </script>
